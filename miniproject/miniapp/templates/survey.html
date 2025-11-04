@@ -1,20 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Survey</title>
 </head>
 <body>
-    <h1>Survey Form</h1>
-    <form>
-        <label>Gender:</label>
-        <input type="text" name="gender" id=""><br><br>
-        <label>Favorite color:</label>
-        <input type="text" name="color" id=""><br><br>
-        <label>Favorite movie genre:</label>
-        <input type="text" name="movie" id="">
+    <h1>Quick Survey</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label>Gender:</label><br>
+        <input type="radio" name="gender" value="male"> <label>Male</label><br>
+        <input type="radio" name="gender" value="female"> <label>Female</label><br>
+        <input type="radio" name="gender" value="other"> <label>Other</label><br><br>
 
+        <label>Favorite color:</label>
+        <select name="favorite_color">
+            <option value="red">Red</option>
+            <option value="blue">Blue</option>
+            <option value="green">Green</option>
+            <option value="black">Black</option>
+            <option value="white">White</option>
+            <option value="other">Other</option>
+        </select>
+        <br><br>
+
+        <label for="genre">Favorite movie genre:</label>
+        <select name="favorite_genre">
+            <option value="action">Action</option>
+            <option value="comedy">Comedy</option>
+            <option value="drama">Drama</option>
+            <option value="horror">Horror</option>
+            <option value="sci-fi">Sci-Fi</option>
+            <option value="romance">Romance</option>
+            <option value="other">Other</option>
+        </select>
+        <br><br>
+
+        <button type="submit">Submit</button>
     </form>
+
+    {% if request.session.survey_data %}
+      <p>Saved answers found. <a href="{% url 'thankyou' %}">View Thank You page</a></p>
+    {% endif %}
 </body>
 </html>

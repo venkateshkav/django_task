@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
 def register_form(request):
     if request.method == "POST":
@@ -11,9 +11,31 @@ def register_form(request):
         request.session['user_age'] = int(Age)
         request.session['user_city'] = City
     return render(request,"index.html")
-def show_details(request):
-    User_name = request.session.get('user_name')
-    User_mail = request.session.get('user_mail')
-    User_age = request.session.get('user_age')
-    User_city = request.session.get('user_city')
-    return render(request,"summary.html",{'User_name':User_name,'User_mail':User_mail,'User_age':User_age,'User_city':User_city})
+
+def survey(request):
+    if request.method == "POST":
+        Gender = request.POST.get("gender")
+        Color = request.POST.get("favorite_color")
+        Genre = request.POST.get("favorite_genre")
+        request.session['survey_data'] = {
+            'gender': Gender,
+            'favorite_color': Color,
+            'favorite_genre': Genre,
+        }
+        return redirect('thankyou')
+    return render(request, "survey.html")
+
+
+def thankyou(request):
+    data = request.session.get('survey_data')
+    if not data:
+        return redirect('survey')
+    return render(request, "thankyou.html", {'data': data})
+
+
+def clear_session(request):
+    if request.method == "POST":
+        if 'survey_data' in request.session:
+            del request.session['survey_data']
+        return redirect('survey')
+    return redirect('survey')

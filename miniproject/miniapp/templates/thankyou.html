@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Thank You</title>
+</head>
+<body>
+  <h1>Thank you for taking the survey!</h1>
+
+  <h3>Your answers</h3>
+  <ul>
+    <li>Gender:{{ data.gender }}</li>
+    <li>Favorite color: {{ data.favorite_color }}</li>
+    <li>Favorite movie genre: {{ data.favorite_genre }}</li>
+  </ul>
+
+  <form method="post" action="{% url 'clear_session' %}">
+    {% csrf_token %}
+    <button type="submit">Restart Survey</button>
+  </form>
+
+  <p><a href="{% url 'survey' %}">Edit answers</a></p>
+</body>
+</html>
