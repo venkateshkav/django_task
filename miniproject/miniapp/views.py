@@ -39,3 +39,30 @@ def clear_session(request):
             del request.session['survey_data']
         return redirect('survey')
     return redirect('survey')
+
+
+def login_view(request):
+    if request.session.get('username'):
+        return redirect('loginapp:welcome')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        if username == "admin" and password == "1234":
+            request.session['username'] = username
+            return redirect('loginapp:welcome')
+    return render(request, "login.html")
+
+
+def welcome(request):
+    user = request.session.get("username")
+    if not user:
+        return redirect('loginapp:login_view')
+    return render(request, "welcome.html", {"user": user})
+
+
+def logout_view(request):
+    if request.method == "POST":
+        request.session.flush()
+        return redirect('loginapp:login_view')
+    return redirect('loginapp:login_view')
+
